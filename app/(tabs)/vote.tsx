@@ -192,7 +192,7 @@ export default function VoteScreen() {
                     <Text className="text-gray-700 font-bold text-sm">
                       {nominee.votes.length} vote{nominee.votes.length !== 1 ? 's' : ''}
                     </Text>
-                    {idx === 0 && nominee.votes.length > 0 && (
+                    {nominee.votes.length > 0 && nominee.votes.length === maxVotes && (
                       <View className="bg-yellow-100 rounded-full px-2 py-0.5">
                         <View className="flex-row items-center gap-1">
                           <FontAwesome5 name="crown" size={9} color="#a16207" solid />
@@ -462,6 +462,7 @@ function NominateModal({
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
+  const [nominated, setNominated] = useState<Set<string>>(new Set());
 
   React.useEffect(() => {
     supabase
@@ -480,9 +481,7 @@ function NominateModal({
       .from('votes')
       .upsert({ book_id: item.book_id, member_name: '__nominee__' }, { onConflict: 'book_id,member_name' });
     setSaving(null);
-    Alert.alert('Nominated!', `"${item.book?.title}" added to vote list.`, [
-      { text: 'OK', onPress: onSaved },
-    ]);
+    setNominated((prev) => new Set(prev).add(item.book_id));
   }
 
   return (
@@ -490,7 +489,7 @@ function NominateModal({
       <View className="flex-1 bg-cream-50">
         <View className="flex-row items-center justify-between px-5 pt-6 pb-4 border-b border-gray-100">
           <Text className="text-lg font-bold text-gray-900">Nominate from Wishlist</Text>
-          <Pressable onPress={onClose}>
+          <Pressable onPress={nominated.size > 0 ? onSaved : onClose}>
             <Text className="text-brand-500 font-medium">Done</Text>
           </Pressable>
         </View>
@@ -512,6 +511,11 @@ function NominateModal({
                 rightElement={
                   saving === item.book_id ? (
                     <ActivityIndicator color="#db2777" size="small" />
+                  ) : nominated.has(item.book_id) ? (
+                    <View className="bg-green-100 rounded-lg px-2 py-1.5 flex-row items-center gap-1">
+                      <FontAwesome5 name="check" size={10} color="#15803d" />
+                      <Text className="text-green-700 text-xs font-medium">Added</Text>
+                    </View>
                   ) : (
                     <Pressable
                       onPress={() => nominate(item)}
