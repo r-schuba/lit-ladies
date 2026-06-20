@@ -179,7 +179,7 @@ export default function VoteScreen() {
           />
         ) : (
           sorted.map((nominee, idx) => (
-            <View key={nominee.book_id} className="mb-3">
+            <View key={nominee.book_id} className="mb-3 border border-gray-200 rounded-2xl overflow-hidden bg-white">
               <BookCard
                 title={nominee.book.title}
                 author={nominee.book.author}
@@ -207,7 +207,7 @@ export default function VoteScreen() {
                 }
               />
               {/* Vote bar */}
-              <View className="bg-gray-200 rounded-full h-2 mx-1 mb-2 -mt-1">
+              <View className="bg-gray-200 rounded-full h-2 mx-3 mb-2 -mt-1">
                 <View
                   className="bg-brand-400 rounded-full h-2"
                   style={{
@@ -216,11 +216,11 @@ export default function VoteScreen() {
                 />
               </View>
               {nominee.votes.length > 0 && (
-                <Text className="text-gray-400 text-xs mx-1 mb-1">
+                <Text className="text-gray-400 text-xs mx-3 mb-1">
                   Votes: {nominee.votes.join(', ')}
                 </Text>
               )}
-              <View className="flex-row gap-2 mx-1">
+              <View className="flex-row gap-2 mx-3 mb-3">
                 <Pressable
                   onPress={() => setPendingWinner(nominee)}
                   className="flex-1 bg-green-50 border border-green-200 rounded-xl py-2 items-center"
