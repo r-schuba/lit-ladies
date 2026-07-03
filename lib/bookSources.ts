@@ -84,6 +84,17 @@ export const BOOK_SOURCES: BookSource[] = [
     getUrl: (title, author) =>
       `https://www.amazon.com/s?k=${enc(`${cleanTitle(title)} ${author}`)}&i=stripbooks`,
   },
+  {
+    id: 'kindle',
+    name: 'Kindle',
+    subtitle: 'eBooks',
+    category: 'buy-online',
+    icon: 'tablet-alt',
+    iconColor: '#1d4ed8',
+    bgColor: '#eff6ff',
+    getUrl: (title, author) =>
+      `https://www.amazon.com/s?k=${enc(`${cleanTitle(title)} ${author}`)}&i=digital-text`,
+  },
   // ── Audiobooks ─────────────────────────────────────────────────────────────
   {
     id: 'audible',
