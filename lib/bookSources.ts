@@ -70,7 +70,7 @@ export const BOOK_SOURCES: BookSource[] = [
     iconColor: '#0369a1',
     bgColor: '#f0f9ff',
     getUrl: (title) =>
-      `https://www.schulerbooks.com/search/site/${enc(cleanTitle(title))}`,
+      `https://schulerbooks.com/search?q=${enc(cleanTitle(title))}`,
   },
   // ── Buy Online ─────────────────────────────────────────────────────────────
   {
