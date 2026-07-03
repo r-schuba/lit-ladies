@@ -39,6 +39,8 @@ export default function BookDetailScreen() {
   const [ratingsExpanded, setRatingsExpanded] = useState(false);
   const [previewBook, setPreviewBook] = useState<PreviewableBook | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
+  const [genreEdit, setGenreEdit] = useState('');
+  const [genreFetching, setGenreFetching] = useState(false);
 
   useEffect(() => {
     loadBook();
@@ -62,6 +64,7 @@ export default function BookDetailScreen() {
 
     const bookData = bookRes.data as FullBook;
     setBook(bookData);
+    setGenreEdit(bookData?.genre ?? '');
     const allMembers = (membersRes.data ?? []) as Member[];
     setMembers(allMembers);
 
@@ -170,6 +173,35 @@ export default function BookDetailScreen() {
     }
   }
 
+  async function fetchGenre() {
+    if (!book) return;
+    setGenreFetching(true);
+    try {
+      const results = await searchBooks(book.title, 3);
+      const match = results.find(
+        (r) => r.title.toLowerCase() === book.title.toLowerCase()
+      ) ?? results[0];
+      const inferred = await inferGenre(book.title, book.author, match?.description ?? null);
+      if (inferred) {
+        setGenreEdit(inferred);
+        await supabase.from('books').update({ genre: inferred }).eq('id', book.id);
+        setBook((prev) => prev ? { ...prev, genre: inferred } : prev);
+      } else {
+        Alert.alert('Not found', 'Could not infer a genre for this book.');
+      }
+    } catch (e) {
+      Alert.alert('Fetch failed', String(e));
+    } finally {
+      setGenreFetching(false);
+    }
+  }
+
+  async function saveGenre(value: string) {
+    if (!book || value === book.genre) return;
+    await supabase.from('books').update({ genre: value || null }).eq('id', book.id);
+    setBook((prev) => prev ? { ...prev, genre: value } : prev);
+  }
+
   function avgRating(): string {
     const log = book?.book_log?.[0];
     if (!log?.ratings || log.ratings.length === 0) return '—';
@@ -252,6 +284,28 @@ export default function BookDetailScreen() {
               </>
           }
         </Pressable>
+
+        {/* Genre Editor */}
+        <View className="flex-row gap-2 mb-5">
+          <TextInput
+            value={genreEdit}
+            onChangeText={setGenreEdit}
+            onBlur={() => saveGenre(genreEdit)}
+            placeholder="Genre"
+            placeholderTextColor="#9ca3af"
+            className="flex-1 bg-cream-50 border border-cream-300 rounded-xl px-4 py-3 text-sm text-[#3a2218]"
+          />
+          <Pressable
+            onPress={fetchGenre}
+            disabled={genreFetching}
+            className="bg-brand-50 border border-brand-200 rounded-xl px-3 items-center justify-center"
+          >
+            {genreFetching
+              ? <ActivityIndicator color="#db2877" size="small" />
+              : <Text className="text-brand-600 text-xs font-medium">Auto{'\n'}Fetch</Text>
+            }
+          </Pressable>
+        </View>
 
         {/* Where to Find It */}
         <View className="bg-cream-50 rounded-2xl p-4 mb-4" style={{ shadowColor: '#8c3e2e', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 6, elevation: 2 }}>
@@ -443,29 +497,7 @@ function EditLogModal({
 }) {
   const [dateRead, setDateRead] = useState(logEntry.date_read ?? '');
   const [location, setLocation] = useState(logEntry.meeting_location ?? '');
-  const [genre, setGenre] = useState(book.genre ?? '');
-  const [genreFetching, setGenreFetching] = useState(false);
   const [saving, setSaving] = useState(false);
-
-  async function fetchGenre() {
-    setGenreFetching(true);
-    try {
-      const results = await searchBooks(book.title, 3);
-      const match = results.find(
-        (r) => r.title.toLowerCase() === book.title.toLowerCase()
-      ) ?? results[0];
-      const inferred = await inferGenre(book.title, book.author, match?.description ?? null);
-      if (inferred) {
-        setGenre(inferred);
-      } else {
-        Alert.alert('Not found', 'Could not infer a genre for this book.');
-      }
-    } catch (e) {
-      Alert.alert('Fetch failed', String(e));
-    } finally {
-      setGenreFetching(false);
-    }
-  }
 
   async function handleSave() {
     setSaving(true);
@@ -474,11 +506,6 @@ function EditLogModal({
         .from('book_log')
         .update({ date_read: dateRead || null, meeting_location: location || null })
         .eq('id', logEntry.id);
-
-      await supabase
-        .from('books')
-        .update({ genre: genre || null })
-        .eq('id', book.id);
 
       onSaved();
     } catch (e) {
@@ -499,27 +526,6 @@ function EditLogModal({
         </View>
 
         <ScrollView className="flex-1 px-5 pt-4">
-          <Text className="text-gray-700 text-sm font-medium mb-1">Genre</Text>
-          <View className="flex-row gap-2 mb-4">
-            <TextInput
-              value={genre}
-              onChangeText={setGenre}
-              placeholder="e.g. Literary Fiction"
-              placeholderTextColor="#9ca3af"
-              className="flex-1 bg-cream-100 border border-cream-300 rounded-xl px-4 py-3 text-sm text-[#3a2218]"
-            />
-            <Pressable
-              onPress={fetchGenre}
-              disabled={genreFetching}
-              className="bg-brand-50 border border-brand-200 rounded-xl px-3 items-center justify-center"
-            >
-              {genreFetching
-                ? <ActivityIndicator color="#db2777" size="small" />
-                : <Text className="text-brand-600 text-xs font-medium">Auto{'\n'}Fetch</Text>
-              }
-            </Pressable>
-          </View>
-
           <DatePickerField
             label="Date"
             value={dateRead}
