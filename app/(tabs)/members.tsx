@@ -61,7 +61,8 @@ export default function MembersScreen() {
           onChangeText={setNewName}
           placeholder="Member name..."
           placeholderTextColor="#9ca3af"
-          className="flex-1 border border-cream-300 bg-cream-50 rounded-xl px-4 py-3 text-sm text-[#3a2218]"
+          style={{ fontSize: 16 }}
+              className="flex-1 border border-cream-300 bg-cream-50 rounded-xl px-4 py-3 text-sm text-[#3a2218]"
           onSubmitEditing={addMember}
         />
         <Pressable

@@ -273,6 +273,7 @@ export default function MemberProfileScreen() {
               placeholder="Phone number..."
               placeholderTextColor="rgba(255,255,255,0.6)"
               keyboardType="phone-pad"
+              style={{ fontSize: 16 }}
               className="text-white text-sm border-b border-white/60 pb-1 min-w-32 text-center"
               autoFocus
             />

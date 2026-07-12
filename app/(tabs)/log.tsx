@@ -459,7 +459,8 @@ function AddBookModal({
                 onChangeText={setMeetingLocation}
                 placeholder="e.g. Sarah's house"
                 placeholderTextColor="#9ca3af"
-                className="bg-cream-100 border border-cream-300 rounded-xl px-4 py-3 text-sm text-[#3a2218] mb-4"
+                style={{ fontSize: 16 }}
+              className="bg-cream-100 border border-cream-300 rounded-xl px-4 py-3 text-sm text-[#3a2218] mb-4"
               />
 
               <Text className="text-gray-700 text-sm font-medium mb-2">Member Ratings (1–10)</Text>

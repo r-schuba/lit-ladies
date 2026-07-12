@@ -20,7 +20,8 @@ export function SearchBar({ value, onChangeText, onSubmit, placeholder, loading 
         placeholder={placeholder ?? 'Search books...'}
         placeholderTextColor="#9ca3af"
         returnKeyType="search"
-        className="flex-1 text-gray-900 text-sm"
+        style={{ fontSize: 16 }}
+              className="flex-1 text-gray-900 text-sm"
       />
       <Pressable
         onPress={onSubmit}

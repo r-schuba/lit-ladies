@@ -186,7 +186,8 @@ function Field({
         keyboardType={keyboardType}
         multiline={multiline}
         numberOfLines={multiline ? 3 : 1}
-        className={`border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 ${
+        style={{ fontSize: 16 }}
+              className={`border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 ${
           multiline ? 'min-h-20 text-top' : ''
         }`}
       />

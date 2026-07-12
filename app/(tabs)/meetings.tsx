@@ -390,7 +390,8 @@ export default function MeetingsScreen() {
                           }
                           placeholder="YYYY-MM-DD"
                           placeholderTextColor="#9ca3af"
-                          className="bg-cream-100 border border-cream-300 rounded-xl px-3 py-2 text-sm text-[#3a2218]"
+                          style={{ fontSize: 16 }}
+              className="bg-cream-100 border border-cream-300 rounded-xl px-3 py-2 text-sm text-[#3a2218]"
                           keyboardType="numbers-and-punctuation"
                         />
                       </View>
@@ -406,7 +407,8 @@ export default function MeetingsScreen() {
                           }
                           placeholder="e.g. Sarah's house"
                           placeholderTextColor="#9ca3af"
-                          className="bg-cream-100 border border-cream-300 rounded-xl px-3 py-2 text-sm text-[#3a2218]"
+                          style={{ fontSize: 16 }}
+              className="bg-cream-100 border border-cream-300 rounded-xl px-3 py-2 text-sm text-[#3a2218]"
                         />
                       </View>
                     </View>

@@ -293,7 +293,8 @@ export default function BookDetailScreen() {
             onBlur={() => saveGenre(genreEdit)}
             placeholder="Genre"
             placeholderTextColor="#9ca3af"
-            className="flex-1 bg-cream-50 border border-cream-300 rounded-xl px-4 py-3 text-sm text-[#3a2218]"
+            style={{ fontSize: 16 }}
+              className="flex-1 bg-cream-50 border border-cream-300 rounded-xl px-4 py-3 text-sm text-[#3a2218]"
           />
           <Pressable
             onPress={fetchGenre}
@@ -539,7 +540,8 @@ function EditLogModal({
             onChangeText={setLocation}
             placeholder="e.g. Sarah's house"
             placeholderTextColor="#9ca3af"
-            className="bg-cream-100 border border-cream-300 rounded-xl px-4 py-3 text-sm text-[#3a2218] mb-4"
+            style={{ fontSize: 16 }}
+              className="bg-cream-100 border border-cream-300 rounded-xl px-4 py-3 text-sm text-[#3a2218] mb-4"
           />
 
           <Pressable

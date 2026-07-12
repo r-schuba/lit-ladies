@@ -23,7 +23,8 @@ export function RatingInput({ memberName, score, onScoreChange, onBlur, saving }
           placeholder="1–10"
           placeholderTextColor="#9ca3af"
           maxLength={4}
-          className="border border-gray-200 rounded-lg px-3 py-1.5 w-20 text-center text-sm text-gray-900"
+          style={{ fontSize: 16 }}
+              className="border border-gray-200 rounded-lg px-3 py-1.5 w-20 text-center text-sm text-gray-900"
         />
         <Text className="text-gray-400 text-xs">/10</Text>
       </View>
